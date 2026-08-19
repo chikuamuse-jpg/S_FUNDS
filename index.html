@@ -3,16 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S_funds</title>
+
+    <title>S_funds | Simple Money Platform</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .logo span {
+            color: #2563eb;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #374151;
+            margin-left: 25px;
+            font-weight: 500;
+        }
+
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero h1 {
+            font-size: 55px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #2563eb;
+        }
+
+        .hero p {
+            font-size: 19px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .secondary {
+            background: white;
+            color: #2563eb;
+            border: 1px solid #2563eb;
+        }
+
+        .features {
+            background: white;
+            padding: 70px 8%;
+        }
+
+        .features h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 32px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .feature {
+            padding: 30px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .feature h3 {
+            margin: 15px 0 10px;
+        }
+
+        .feature p {
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #6b7280;
+            background: #f5f7fb;
+        }
+
+        @media (max-width: 700px) {
+
+            header {
+                padding: 18px 5%;
+            }
+
+            nav a {
+                margin-left: 10px;
+                font-size: 14px;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>Welcome to S_funds</h1>
+<header>
 
-    <p>Your simple and secure money platform.</p>
+    <div class="logo">
+        S<span>Money</span>
+    </div>
 
-    <button>Get Started</button>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+    </nav>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+            Move your money with
+            <span>S_funds</span>
+        </h1>
+
+        <p>
+            A simple platform designed to help you manage
+            your money and make transfers easily.
+        </p>
+
+        <div class="buttons">
+
+            <a href="#" class="btn primary">
+                Get Started
+            </a>
+
+            <a href="#" class="btn secondary">
+                Learn More
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="features">
+
+    <h2>
+        What you can do with S_funds
+    </h2>
+
+    <div class="feature-grid">
+
+        <div class="feature">
+
+            <div style="font-size:40px;">💰</div>
+
+            <h3>
+                Manage Money
+            </h3>
+
+            <p>
+                Keep track of your balance and
+                manage your money from one place.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div style="font-size:40px;">💸</div>
+
+            <h3>
+                Send Money
+            </h3>
+
+            <p>
+                Send money to beneficiaries using
+                their account information.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div style="font-size:40px;">🔒</div>
+
+            <h3>
+                Secure
+            </h3>
+
+            <p>
+                Your account and transaction
+                information should be protected.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    © 2026 S_funds. All rights reserved.
+
+</footer>
 
 </body>
 </html>
