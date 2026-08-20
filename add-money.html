@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Money | SMoney</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+        }
+
+        header {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #2563eb;
+        }
+
+        .back {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .method {
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            padding: 16px;
+            cursor: pointer;
+        }
+
+        .method:hover {
+            border-color: #2563eb;
+        }
+
+        .method strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .method small {
+            color: #6b7280;
+        }
+
+        .primary {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .notice {
+            background: #eff6ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            color: #1e40af;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            .methods {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        S<span>Money</span>
+    </div>
+
+    <a href="dashboard.html" class="back">
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>
+            Add Money
+        </h1>
+
+        <p class="subtitle">
+            Choose how you would like to add money
+            to your SMoney account.
+        </p>
+
+
+        <label for="amount">
+            Amount
+        </label>
+
+        <input
+            type="number"
+            id="amount"
+            placeholder="Enter amount"
+            min="1"
+        >
+
+
+        <label>
+            Funding Method
+        </label>
+
+        <div class="methods">
+
+            <div class="method">
+
+                <strong>
+                    🏦 Bank Transfer
+                </strong>
+
+                <small>
+                    Transfer from your bank
+                </small>
+
+            </div>
+
+
+            <div class="method">
+
+                <strong>
+                    💳 Card
+                </strong>
+
+                <small>
+                    Pay with an eligible card
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <button class="primary">
+            Continue
+        </button>
+
+
+        <div class="notice">
+            <strong>Security notice:</strong><br>
+            SMoney will use a licensed payment provider
+            for real deposits. This page does not currently
+            process or store real card or bank information.
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
