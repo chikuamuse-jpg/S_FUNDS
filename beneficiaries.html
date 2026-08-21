@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Beneficiaries | SMoney</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+        }
+
+        header {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #2563eb;
+        }
+
+        .back {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+            margin-top: 16px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .primary {
+            width: 100%;
+            margin-top: 22px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .beneficiary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .beneficiary:last-child {
+            border-bottom: none;
+        }
+
+        .beneficiary-info h3 {
+            margin-bottom: 6px;
+        }
+
+        .beneficiary-info p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .delete {
+            border: none;
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 9px 13px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .empty {
+            text-align: center;
+            color: #6b7280;
+            padding: 25px;
+        }
+
+        .notice {
+            background: #eff6ff;
+            color: #1e40af;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 650px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+
+            .beneficiary {
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        S<span>Money</span>
+    </div>
+
+    <a href="dashboard.html" class="back">
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>
+            Add Beneficiary
+        </h1>
+
+        <p class="subtitle">
+            Save an account for future transfers.
+        </p>
+
+
+        <form>
+
+            <div class="row">
+
+                <div>
+
+                    <label for="name">
+                        Beneficiary Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Full name"
+                        required
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label for="bank">
+                        Bank
+                    </label>
+
+                    <select id="bank" required>
+
+                        <option value="">
+                            Select bank
+                        </option>
+
+                        <option>
+                            Access Bank
+                        </option>
+
+                        <option>
+                            First Bank
+                        </option>
+
+                        <option>
+                            GTBank
+                        </option>
+
+                        <option>
+                            UBA
+                        </option>
+
+                        <option>
+                            Zenith Bank
+                        </option>
+
+                        <option>
+                            Stanbic IBTC
+                        </option>
+
+                        <option>
+                            Sterling Bank
+                        </option>
+
+                        <option>
+                            Wema Bank
+                        </option>
+
+                        <option>
+                            FCMB
+                        </option>
+
+                        <option>
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <label for="account">
+                Account Number
+            </label>
+
+            <input
+                type="text"
+                id="account"
+                placeholder="10-digit account number"
+                inputmode="numeric"
+                maxlength="10"
+                required
+            >
+
+
+            <button
+                type="submit"
+                class="primary">
+                Add Beneficiary
+            </button>
+
+        </form>
+
+        <div class="notice">
+            Beneficiary information should only be stored
+            after proper authentication and secure
+            server-side protection are implemented.
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>
+            Saved Beneficiaries
+        </h2>
+
+        <div class="beneficiary">
+
+            <div class="beneficiary-info">
+
+                <h3>
+                    Example Beneficiary
+                </h3>
+
+                <p>
+                    GTBank<br>
+                    Account: 0123456789
+                </p>
+
+            </div>
+
+            <button class="delete">
+                Delete
+            </button>
+
+        </div>
+
+
+        <div class="empty">
+            More beneficiaries will appear here.
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
