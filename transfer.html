@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Transfer Money | SMoney</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+        }
+
+        header {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #2563eb;
+        }
+
+        .back {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+            margin-top: 18px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .primary {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .primary:hover {
+            background: #1d4ed8;
+        }
+
+        .notice {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #fffbeb;
+            color: #92400e;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        S<span>Money</span>
+    </div>
+
+    <a href="dashboard.html" class="back">
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>
+            Transfer Money
+        </h1>
+
+        <p class="subtitle">
+            Enter the beneficiary information and
+            transfer amount below.
+        </p>
+
+
+        <form>
+
+            <div class="row">
+
+                <div>
+
+                    <label for="recipient">
+                        Recipient's Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="recipient"
+                        placeholder="Full name"
+                        required
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label for="beneficiary">
+                        Beneficiary Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="beneficiary"
+                        placeholder="Beneficiary name"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <label for="bank">
+                Bank
+            </label>
+
+            <select id="bank" required>
+
+                <option value="">
+                    Select bank
+                </option>
+
+                <option>
+                    Access Bank
+                </option>
+
+                <option>
+                    First Bank
+                </option>
+
+                <option>
+                    GTBank
+                </option>
+
+                <option>
+                    UBA
+                </option>
+
+                <option>
+                    Zenith Bank
+                </option>
+
+                <option>
+                    Stanbic IBTC
+                </option>
+
+                <option>
+                    Sterling Bank
+                </option>
+
+                <option>
+                    Wema Bank
+                </option>
+
+                <option>
+                    FCMB
+                </option>
+
+                <option>
+                    Other
+                </option>
+
+            </select>
+
+
+            <label for="account">
+                Account Number
+            </label>
+
+            <input
+                type="text"
+                id="account"
+                placeholder="Enter 10-digit account number"
+                inputmode="numeric"
+                maxlength="10"
+                required
+            >
+
+
+            <label for="amount">
+                Amount
+            </label>
+
+            <input
+                type="number"
+                id="amount"
+                placeholder="₦0.00"
+                min="1"
+                required
+            >
+
+
+            <label for="description">
+                Transfer Description
+            </label>
+
+            <input
+                type="text"
+                id="description"
+                placeholder="What is this transfer for?"
+            >
+
+
+            <button
+                type="submit"
+                class="primary">
+                Continue
+            </button>
+
+        </form>
+
+
+        <div class="notice">
+
+            <strong>Security notice:</strong><br>
+
+            This form is currently only a website
+            interface. It does not send real money.
+            Real transfers will require secure
+            account verification and a licensed
+            payment provider.
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
