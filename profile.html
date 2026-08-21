@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Profile | SMoney</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+        }
+
+        header {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #2563eb;
+        }
+
+        .back {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        .profile-item {
+            padding: 18px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .profile-item:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .value {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .security {
+            display: block;
+            padding: 18px 0;
+            border-bottom: 1px solid #e5e7eb;
+            color: #111827;
+            text-decoration: none;
+        }
+
+        .security:last-child {
+            border-bottom: none;
+        }
+
+        .security strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .security span {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .logout {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            background: #fee2e2;
+            color: #b91c1c;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .notice {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #eff6ff;
+            color: #1e40af;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 18px 5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        S<span>Money</span>
+    </div>
+
+    <a href="dashboard.html" class="back">
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>
+            My Profile
+        </h1>
+
+        <p class="subtitle">
+            Manage your SMoney account information.
+        </p>
+
+
+        <div class="profile-item">
+
+            <div class="label">
+                Full Name
+            </div>
+
+            <div class="value">
+                Not available yet
+            </div>
+
+        </div>
+
+
+        <div class="profile-item">
+
+            <div class="label">
+                Email Address
+            </div>
+
+            <div class="value">
+                Not available yet
+            </div>
+
+        </div>
+
+
+        <div class="profile-item">
+
+            <div class="label">
+                Phone Number
+            </div>
+
+            <div class="value">
+                Not available yet
+            </div>
+
+        </div>
+
+
+        <div class="profile-item">
+
+            <div class="label">
+                Account Number
+            </div>
+
+            <div class="value">
+                Not assigned
+            </div>
+
+        </div>
+
+
+        <div class="profile-item">
+
+            <div class="label">
+                Account Status
+            </div>
+
+            <div class="status">
+                Setup Required
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>
+            Security
+        </h2>
+
+
+        <a href="#" class="security">
+
+            <strong>
+                🔐 Change Password
+            </strong>
+
+            <span>
+                Update your account password securely.
+            </span>
+
+        </a>
+
+
+        <a href="#" class="security">
+
+            <strong>
+                📱 Phone Verification
+            </strong>
+
+            <span>
+                Verify and manage your phone number.
+            </span>
+
+        </a>
+
+
+        <a href="#" class="security">
+
+            <strong>
+                🛡️ Two-Factor Authentication
+            </strong>
+
+            <span>
+                Add an additional layer of account security.
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <div class="card">
+
+        <a href="index.html" class="logout">
+            Log Out
+        </a>
+
+        <div class="notice">
+
+            Real account information and security
+            settings will only become active after
+            we connect the secure authentication
+            and database system.
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
