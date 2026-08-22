@@ -392,10 +392,12 @@
 
         } catch (error) {
 
-            showMessage(
-                "Something went wrong. Please try again.",
-                "error"
-            );
+    showMessage(
+        "ERROR: " + error.message,
+        "error"
+    );
+
+    console.error(error);
 
             button.disabled = false;
 
