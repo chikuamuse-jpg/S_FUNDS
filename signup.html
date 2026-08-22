@@ -94,6 +94,18 @@
             background: #1d4ed8;
         }
 
+        button:disabled {
+            background: #93c5fd;
+            cursor: not-allowed;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
         .login {
             text-align: center;
             margin-top: 22px;
@@ -132,7 +144,7 @@
             Create your SMoney account
         </p>
 
-        <form>
+        <form id="signupForm">
 
             <label for="fullname">
                 Full Name
@@ -146,7 +158,6 @@
                 required
             >
 
-
             <label for="email">
                 Email Address
             </label>
@@ -158,7 +169,6 @@
                 placeholder="Enter your email"
                 required
             >
-
 
             <label for="phone">
                 Phone Number
@@ -172,7 +182,6 @@
                 required
             >
 
-
             <label for="password">
                 Password
             </label>
@@ -183,8 +192,8 @@
                 name="password"
                 placeholder="Create a password"
                 required
+                minlength="6"
             >
-
 
             <label for="confirm-password">
                 Confirm Password
@@ -196,12 +205,14 @@
                 name="confirm-password"
                 placeholder="Confirm your password"
                 required
+                minlength="6"
             >
 
-
-            <button type="submit">
+            <button type="submit" id="signupButton">
                 Create Account
             </button>
+
+            <p id="message"></p>
 
         </form>
 
@@ -217,6 +228,183 @@
     </div>
 
 </div>
+
+
+<script type="module">
+
+    import { createClient } from
+    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+
+    // YOUR SMONEY SUPABASE PROJECT
+    const SUPABASE_URL =
+        "https://ljmpfkdursxpoxhdvel.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+        "sb_publishable_5_u__3sf1VxfLTRupenrvw_6TfA3xeA";
+
+
+    // Connect to Supabase
+    const supabase = createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+    const form =
+        document.getElementById("signupForm");
+
+    const button =
+        document.getElementById("signupButton");
+
+    const message =
+        document.getElementById("message");
+
+
+    function showMessage(text, type) {
+
+        message.textContent = text;
+
+        if (type === "success") {
+            message.style.color = "green";
+        } else {
+            message.style.color = "red";
+        }
+    }
+
+
+    form.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        const fullname =
+            document.getElementById("fullname").value.trim();
+
+        const email =
+            document.getElementById("email").value.trim();
+
+        const phone =
+            document.getElementById("phone").value.trim();
+
+        const password =
+            document.getElementById("password").value;
+
+        const confirmPassword =
+            document.getElementById("confirm-password").value;
+
+
+        // Check passwords
+        if (password !== confirmPassword) {
+
+            showMessage(
+                "Passwords do not match.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        // Check password length
+        if (password.length < 6) {
+
+            showMessage(
+                "Password must be at least 6 characters.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        // Disable button
+        button.disabled = true;
+
+        button.textContent = "Creating Account...";
+
+        message.textContent = "";
+
+
+        try {
+
+            const { data, error } =
+                await supabase.auth.signUp({
+
+                    email: email,
+
+                    password: password,
+
+                    options: {
+
+                        data: {
+                            full_name: fullname,
+                            phone: phone
+                        }
+
+                    }
+
+                });
+
+
+            if (error) {
+
+                showMessage(
+                    error.message,
+                    "error"
+                );
+
+                button.disabled = false;
+
+                button.textContent = "Create Account";
+
+                return;
+            }
+
+
+            // Successful signup
+            if (data.session) {
+
+                showMessage(
+                    "Account created successfully. Redirecting...",
+                    "success"
+                );
+
+                setTimeout(function() {
+
+                    window.location.href =
+                        "dashboard.html";
+
+                }, 1000);
+
+            } else {
+
+                showMessage(
+                    "Account created! Please check your email to confirm your account.",
+                    "success"
+                );
+
+                button.disabled = false;
+
+                button.textContent = "Create Account";
+            }
+
+
+        } catch (error) {
+
+            showMessage(
+                "Something went wrong. Please try again.",
+                "error"
+            );
+
+            button.disabled = false;
+
+            button.textContent = "Create Account";
+        }
+
+    });
+
+</script>
 
 </body>
 </html>
