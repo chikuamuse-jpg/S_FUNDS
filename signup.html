@@ -90,34 +90,9 @@
             cursor: pointer;
         }
 
-        button:hover {
-            background: #1d4ed8;
-        }
-
         button:disabled {
-            background: #93a3c7;
+            opacity: 0.6;
             cursor: not-allowed;
-        }
-
-        #message {
-            display: none;
-            text-align: center;
-            margin-top: 18px;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .success {
-            display: block !important;
-            color: #166534;
-            background: #dcfce7;
-        }
-
-        .error {
-            display: block !important;
-            color: #dc2626;
-            background: #fee2e2;
         }
 
         .login {
@@ -138,6 +113,26 @@
             margin-top: 20px;
             color: #374151;
             text-decoration: none;
+        }
+
+        #message {
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+
+        .success {
+            display: block !important;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .error {
+            display: block !important;
+            background: #fee2e2;
+            color: #b91c1c;
         }
     </style>
 </head>
@@ -160,9 +155,7 @@
 
         <form id="signupForm">
 
-            <label for="fullname">
-                Full Name
-            </label>
+            <label for="fullname">Full Name</label>
 
             <input
                 type="text"
@@ -172,9 +165,7 @@
                 required
             >
 
-            <label for="email">
-                Email Address
-            </label>
+            <label for="email">Email Address</label>
 
             <input
                 type="email"
@@ -184,9 +175,7 @@
                 required
             >
 
-            <label for="phone">
-                Phone Number
-            </label>
+            <label for="phone">Phone Number</label>
 
             <input
                 type="tel"
@@ -196,39 +185,35 @@
                 required
             >
 
-            <label for="password">
-                Password
-            </label>
+            <label for="password">Password</label>
 
             <input
                 type="password"
                 id="password"
                 name="password"
                 placeholder="Create a password"
-                required
                 minlength="6"
+                required
             >
 
-            <label for="confirm-password">
-                Confirm Password
-            </label>
+            <label for="confirm-password">Confirm Password</label>
 
             <input
                 type="password"
                 id="confirm-password"
                 name="confirm-password"
                 placeholder="Confirm your password"
-                required
                 minlength="6"
+                required
             >
 
             <button type="submit" id="signupButton">
                 Create Account
             </button>
 
-            <div id="message"></div>
-
         </form>
+
+        <div id="message"></div>
 
         <div class="login">
             Already have an account?
@@ -244,27 +229,34 @@
 </div>
 
 
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module">
 
-<script>
+    import { createClient } from
+        "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
 
     const SUPABASE_URL =
         "https://ljmpfkdursxpoxhdvel.supabase.co";
 
+
     const SUPABASE_PUBLISHABLE_KEY =
-        "sb_publishable_5_u__3sf1vXfLTRupenrvw_6TfA3xeA";
+        "sb-publishable_5_u__3sf1vXfLTRupenrvw_6TfA3xeA";
 
 
-    const supabaseClient = window.supabase.createClient(
+    const supabase = createClient(
         SUPABASE_URL,
         SUPABASE_PUBLISHABLE_KEY
     );
 
 
-    const form = document.getElementById("signupForm");
-    const button = document.getElementById("signupButton");
-    const message = document.getElementById("message");
+    const form =
+        document.getElementById("signupForm");
+
+    const button =
+        document.getElementById("signupButton");
+
+    const message =
+        document.getElementById("message");
 
 
     function showMessage(text, type) {
@@ -297,10 +289,6 @@
             document.getElementById("confirm-password").value;
 
 
-        message.className = "";
-        message.textContent = "";
-
-
         if (password !== confirmPassword) {
 
             showMessage(
@@ -324,13 +312,18 @@
 
 
         button.disabled = true;
+
         button.textContent = "Creating Account...";
+
+        message.className = "";
+
+        message.style.display = "none";
 
 
         try {
 
             const { data, error } =
-                await supabaseClient.auth.signUp({
+                await supabase.auth.signUp({
 
                     email: email,
 
@@ -358,27 +351,9 @@
             if (!data.user) {
 
                 throw new Error(
-                    "Account could not be created. Please try again."
+                    "Account could not be created."
                 );
 
-            }
-
-
-            /*
-             * If Supabase requires email confirmation,
-             * the user will not have a session yet.
-             */
-
-            if (!data.session) {
-
-                showMessage(
-                    "Account created successfully! Please check your email to confirm your account.",
-                    "success"
-                );
-
-                button.textContent = "Account Created";
-
-                return;
             }
 
 
@@ -390,9 +365,9 @@
 
             setTimeout(function() {
 
-                window.location.href = "dashboard.html";
+                window.location.href = "login.html";
 
-            }, 1000);
+            }, 1500);
 
 
         } catch (error) {
@@ -400,11 +375,13 @@
             console.error("Signup error:", error);
 
             showMessage(
-                error.message || "Unable to create account. Please try again.",
+                error.message || "Unable to create account.",
                 "error"
             );
 
+
             button.disabled = false;
+
             button.textContent = "Create Account";
 
         }
