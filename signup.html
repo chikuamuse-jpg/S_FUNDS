@@ -95,15 +95,29 @@
         }
 
         button:disabled {
-            background: #93c5fd;
+            background: #93a3c7;
             cursor: not-allowed;
         }
 
         #message {
+            display: none;
             text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
-            line-height: 1.5;
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .success {
+            display: block !important;
+            color: #166534;
+            background: #dcfce7;
+        }
+
+        .error {
+            display: block !important;
+            color: #dc2626;
+            background: #fee2e2;
         }
 
         .login {
@@ -212,7 +226,7 @@
                 Create Account
             </button>
 
-            <p id="message"></p>
+            <div id="message"></div>
 
         </form>
 
@@ -230,46 +244,35 @@
 </div>
 
 
-<script type="module">
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    import { createClient } from
-    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+<script>
 
-
-    // YOUR SMONEY SUPABASE PROJECT
     const SUPABASE_URL =
         "https://ljmpfkdursxpoxhdvel.supabase.co";
 
     const SUPABASE_PUBLISHABLE_KEY =
-        "sb_publishable_5_u__3sf1VxfLTRupenrvw_6TfA3xeA";
+        "sb_publishable_5_u__3sf1vXfLTRupenrvw_6TfA3xeA";
 
 
-    // Connect to Supabase
-    const supabase = createClient(
+    const supabaseClient = window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_PUBLISHABLE_KEY
     );
 
 
-    const form =
-        document.getElementById("signupForm");
-
-    const button =
-        document.getElementById("signupButton");
-
-    const message =
-        document.getElementById("message");
+    const form = document.getElementById("signupForm");
+    const button = document.getElementById("signupButton");
+    const message = document.getElementById("message");
 
 
     function showMessage(text, type) {
 
         message.textContent = text;
 
-        if (type === "success") {
-            message.style.color = "green";
-        } else {
-            message.style.color = "red";
-        }
+        message.className = type;
+
     }
 
 
@@ -294,7 +297,10 @@
             document.getElementById("confirm-password").value;
 
 
-        // Check passwords
+        message.className = "";
+        message.textContent = "";
+
+
         if (password !== confirmPassword) {
 
             showMessage(
@@ -306,7 +312,6 @@
         }
 
 
-        // Check password length
         if (password.length < 6) {
 
             showMessage(
@@ -318,18 +323,14 @@
         }
 
 
-        // Disable button
         button.disabled = true;
-
         button.textContent = "Creating Account...";
-
-        message.textContent = "";
 
 
         try {
 
             const { data, error } =
-                await supabase.auth.signUp({
+                await supabaseClient.auth.signUp({
 
                     email: email,
 
@@ -349,59 +350,63 @@
 
             if (error) {
 
-                showMessage(
-                    error.message,
-                    "error"
+                throw error;
+
+            }
+
+
+            if (!data.user) {
+
+                throw new Error(
+                    "Account could not be created. Please try again."
                 );
 
-                button.disabled = false;
+            }
 
-                button.textContent = "Create Account";
+
+            /*
+             * If Supabase requires email confirmation,
+             * the user will not have a session yet.
+             */
+
+            if (!data.session) {
+
+                showMessage(
+                    "Account created successfully! Please check your email to confirm your account.",
+                    "success"
+                );
+
+                button.textContent = "Account Created";
 
                 return;
             }
 
 
-            // Successful signup
-            if (data.session) {
+            showMessage(
+                "Account created successfully! Redirecting...",
+                "success"
+            );
 
-                showMessage(
-                    "Account created successfully. Redirecting...",
-                    "success"
-                );
 
-                setTimeout(function() {
+            setTimeout(function() {
 
-                    window.location.href =
-                        "dashboard.html";
+                window.location.href = "dashboard.html";
 
-                }, 1000);
-
-            } else {
-
-                showMessage(
-                    "Account created! Please check your email to confirm your account.",
-                    "success"
-                );
-
-                button.disabled = false;
-
-                button.textContent = "Create Account";
-            }
+            }, 1000);
 
 
         } catch (error) {
 
-    showMessage(
-        "ERROR: " + error.message,
-        "error"
-    );
+            console.error("Signup error:", error);
 
-    console.error(error);
+            showMessage(
+                error.message || "Unable to create account. Please try again.",
+                "error"
+            );
 
             button.disabled = false;
-
             button.textContent = "Create Account";
+
         }
 
     });
