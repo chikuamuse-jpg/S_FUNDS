@@ -100,6 +100,11 @@
             cursor: pointer;
         }
 
+        button:disabled {
+            background: #93c5fd;
+            cursor: not-allowed;
+        }
+
         .signup {
             text-align: center;
             margin-top: 22px;
@@ -118,6 +123,27 @@
             margin-top: 20px;
             color: #374151;
             text-decoration: none;
+        }
+
+        #message {
+            display: none;
+            margin-top: 18px;
+            padding: 14px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        #message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        #message.error {
+            display: block;
+            background: #fee2e2;
+            color: #b91c1c;
         }
     </style>
 </head>
@@ -138,7 +164,7 @@
             Login to your SMoney account
         </p>
 
-        <form>
+        <form id="loginForm">
 
             <label for="email">
                 Email Address
@@ -166,11 +192,13 @@
                 Forgot Password?
             </a>
 
-            <button type="submit">
+            <button type="submit" id="loginButton">
                 Login
             </button>
 
         </form>
+
+        <div id="message"></div>
 
         <div class="signup">
             Don't have an account?
@@ -184,6 +212,190 @@
     </div>
 
 </div>
+
+<script type="module">
+
+    import { createClient } from
+    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+
+    const SUPABASE_URL =
+        "https://ljmpfkdursxpoxhdvel.supabase.co";
+
+
+    const SUPABASE_PUBLISHABLE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqbXBma2R1cnN4cG94aGR2ZWwiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTcyNDQzNzI0MCwiZXhwIjoxNzQwODk3MjQwfQ.sb-publishable_5_u__3sf1vXfLTRupernrvw_6TfA3xeA";
+
+
+    const supabase = createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+    const form =
+        document.getElementById("loginForm");
+
+    const button =
+        document.getElementById("loginButton");
+
+    const message =
+        document.getElementById("message");
+
+
+    function showMessage(text, type) {
+
+        message.textContent = text;
+
+        message.className = type;
+
+    }
+
+
+    /*
+     * Check if user is already logged in
+     * If yes, redirect to dashboard
+     */
+
+    async function checkAuthStatus() {
+
+        try {
+
+            const { data: { session } } =
+                await supabase.auth.getSession();
+
+            if (session) {
+
+                window.location.href = "dashboard.html";
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Auth check error:",
+                error
+            );
+
+        }
+
+    }
+
+    checkAuthStatus();
+
+
+    form.addEventListener("submit", async function(event) {
+
+        /*
+         * VERY IMPORTANT:
+         * Stop the browser from submitting the form normally.
+         */
+
+        event.preventDefault();
+
+
+        const email =
+            document.getElementById("email").value.trim();
+
+        const password =
+            document.getElementById("password").value;
+
+
+        message.className = "";
+        message.textContent = "";
+
+
+        if (!email || !password) {
+
+            showMessage(
+                "Please fill in all fields.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        button.disabled = true;
+
+        button.textContent = "Logging in...";
+
+
+        try {
+
+            const { data, error } =
+                await supabase.auth.signInWithPassword({
+
+                    email: email,
+
+                    password: password
+
+                });
+
+
+            if (error) {
+
+                throw error;
+
+            }
+
+
+            if (!data.user) {
+
+                throw new Error(
+                    "Login failed."
+                );
+
+            }
+
+
+            showMessage(
+                "Login successful! Redirecting...",
+                "success"
+            );
+
+
+            button.textContent = "Logged In";
+
+
+            /*
+             * Give the success message a moment,
+             * then go to the dashboard page.
+             */
+
+            setTimeout(function() {
+
+                window.location.href = "dashboard.html";
+
+            }, 1500);
+
+
+        } catch (error) {
+
+            console.error(
+                "Login error:",
+                error
+            );
+
+
+            showMessage(
+                error.message ||
+                "Unable to login. Please check your credentials.",
+                "error"
+            );
+
+
+            button.disabled = false;
+
+            button.textContent =
+                "Login";
+
+        }
+
+    });
+
+</script>
 
 </body>
 </html>
