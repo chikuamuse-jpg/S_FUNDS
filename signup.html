@@ -156,59 +156,68 @@
 
         <form id="signupForm">
 
-            <label for="fullname">Full Name</label>
+            <label for="fullname">
+                Full Name
+            </label>
 
             <input
                 type="text"
                 id="fullname"
-                name="fullname"
                 placeholder="Enter your full name"
                 required
             >
 
-            <label for="email">Email Address</label>
+            <label for="email">
+                Email Address
+            </label>
 
             <input
                 type="email"
                 id="email"
-                name="email"
                 placeholder="Enter your email"
                 required
             >
 
-            <label for="phone">Phone Number</label>
+            <label for="phone">
+                Phone Number
+            </label>
 
             <input
                 type="tel"
                 id="phone"
-                name="phone"
                 placeholder="Enter your phone number"
                 required
             >
 
-            <label for="password">Password</label>
+            <label for="password">
+                Password
+            </label>
 
             <input
                 type="password"
                 id="password"
-                name="password"
                 placeholder="Create a password"
                 minlength="6"
                 required
             >
 
-            <label for="confirmPassword">Confirm Password</label>
+            <label for="confirmPassword">
+                Confirm Password
+            </label>
 
             <input
                 type="password"
                 id="confirmPassword"
-                name="confirmPassword"
                 placeholder="Confirm your password"
                 minlength="6"
                 required
             >
 
-            <button type="submit" id="signupButton">
+            <!-- IMPORTANT: type="button" -->
+            <button
+                type="button"
+                id="signupButton"
+            >
                 Create Account
             </button>
 
@@ -236,12 +245,15 @@
     "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 
-    const SUPABASE_URL =
-        "https://ljmpfkdursxpoxhdvel.supabase.co";
+    /* ==============================
+       YOUR SUPABASE CONNECTION
+       ============================== */
 
+    const SUPABASE_URL =
+        "https://ljmpfkdursxpoxkhdvel.supabase.co";
 
     const SUPABASE_PUBLISHABLE_KEY =
-        "sb-publishable_5_u__3sf1vXfLTRupernrvw_6TfA3xeA";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqbXBma2R1cnN4cG94a2hkdmVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczMTE0NzMsImV4cCI6MjEwMjg4NzQ3M30.u7aYKII3RPLNrIz5sn9xzxXFuPg79Fabm6filX1vHF8";
 
 
     const supabase = createClient(
@@ -250,8 +262,9 @@
     );
 
 
-    const form =
-        document.getElementById("signupForm");
+    /* ==============================
+       GET HTML ELEMENTS
+       ============================== */
 
     const button =
         document.getElementById("signupButton");
@@ -259,6 +272,10 @@
     const message =
         document.getElementById("message");
 
+
+    /* ==============================
+       SHOW MESSAGE
+       ============================== */
 
     function showMessage(text, type) {
 
@@ -269,15 +286,11 @@
     }
 
 
-    form.addEventListener("submit", async function(event) {
+    /* ==============================
+       CREATE ACCOUNT
+       ============================== */
 
-        /*
-         * VERY IMPORTANT:
-         * Stop the browser from submitting the form normally.
-         */
-
-        event.preventDefault();
-
+    button.addEventListener("click", async function () {
 
         const fullname =
             document.getElementById("fullname").value.trim();
@@ -295,9 +308,30 @@
             document.getElementById("confirmPassword").value;
 
 
-        message.className = "";
-        message.textContent = "";
+        /* Clear previous message */
 
+        message.textContent = "";
+        message.className = "";
+
+
+        /* Check required fields */
+
+        if (!fullname ||
+            !email ||
+            !phone ||
+            !password ||
+            !confirmPassword) {
+
+            showMessage(
+                "Please fill in all fields.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        /* Check passwords */
 
         if (password !== confirmPassword) {
 
@@ -310,6 +344,8 @@
         }
 
 
+        /* Check password length */
+
         if (password.length < 6) {
 
             showMessage(
@@ -321,9 +357,12 @@
         }
 
 
+        /* Disable button */
+
         button.disabled = true;
 
-        button.textContent = "Creating Account...";
+        button.textContent =
+            "Creating Account...";
 
 
         try {
@@ -338,17 +377,19 @@
                     options: {
 
                         data: {
-
                             full_name: fullname,
-
                             phone: phone
+                        },
 
-                        }
-
+                        emailRedirectTo:
+                            window.location.origin +
+                            "/login.html"
                     }
 
                 });
 
+
+            /* Supabase returned an error */
 
             if (error) {
 
@@ -357,14 +398,18 @@
             }
 
 
-            if (!data.user) {
+            /* Make sure account was created */
+
+            if (!data || !data.user) {
 
                 throw new Error(
-                    "Account could not be created."
+                    "Account was not created."
                 );
 
             }
 
+
+            /* Success */
 
             showMessage(
                 "Account created successfully!",
@@ -372,17 +417,19 @@
             );
 
 
-            button.textContent = "Account Created";
+            button.textContent =
+                "Account Created";
 
 
             /*
-             * Give the success message a moment,
-             * then go to the login page.
+             * Wait 1.5 seconds,
+             * then go to login page.
              */
 
-            setTimeout(function() {
+            setTimeout(function () {
 
-                window.location.href = "login.html";
+                window.location.href =
+                    "login.html";
 
             }, 1500);
 
@@ -390,7 +437,7 @@
         } catch (error) {
 
             console.error(
-                "Signup error:",
+                "Supabase signup error:",
                 error
             );
 
