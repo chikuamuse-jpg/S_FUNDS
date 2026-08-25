@@ -41,6 +41,10 @@
             color: #dc2626;
             text-decoration: none;
             font-weight: bold;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
         }
 
         .container {
@@ -59,6 +63,12 @@
 
         .welcome p {
             color: #6b7280;
+        }
+
+        .user-email {
+            margin-top: 6px;
+            color: #2563eb;
+            font-size: 14px;
         }
 
         .balance-card {
@@ -145,6 +155,21 @@
             padding: 30px;
         }
 
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        .error-box {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
         @media (max-width: 700px) {
 
             .actions {
@@ -170,123 +195,507 @@
         S<span>Money</span>
     </div>
 
-    <a href="index.html" class="logout">
+    <button id="logoutButton" class="logout">
         Logout
-    </a>
+    </button>
 
 </header>
 
 
 <div class="container">
 
-    <div class="welcome">
-
-        <h1>
-            Welcome to your Dashboard
-        </h1>
-
-        <p>
-            Manage your SMoney account from one place.
-        </p>
-
+    <div id="loading" class="loading">
+        Loading your SMoney account...
     </div>
 
 
-    <div class="balance-card">
+    <div id="dashboardContent" style="display: none;">
 
-        <p>
-            Available Balance
-        </p>
+        <div class="error-box" id="errorBox"></div>
 
-        <div class="balance">
-            ₦0.00
+
+        <div class="welcome">
+
+            <h1>
+                Welcome, <span id="userName">User</span>
+            </h1>
+
+            <p>
+                Manage your SMoney account from one place.
+            </p>
+
+            <div class="user-email" id="userEmail">
+                Loading email...
+            </div>
+
         </div>
 
-        <div class="account-number">
-            Account Number: 0123456789
+
+        <div class="balance-card">
+
+            <p>
+                Available Balance
+            </p>
+
+            <div class="balance">
+                ₦0.00
+            </div>
+
+            <div class="account-number">
+                Account Number:
+                <span id="accountNumber">
+                    Generating...
+                </span>
+            </div>
+
         </div>
 
-    </div>
+
+        <div class="actions">
+
+            <a href="#" class="action" id="addMoney">
+
+                <div class="icon">
+                    💰
+                </div>
+
+                <h3>
+                    Add Money
+                </h3>
+
+                <p>
+                    Add money to your SMoney account.
+                </p>
+
+            </a>
 
 
-    <div class="actions">
+            <a href="#" class="action" id="transferMoney">
 
-        <a href="#" class="action">
+                <div class="icon">
+                    💸
+                </div>
 
-            <div class="icon">
-                💰
-            </div>
+                <h3>
+                    Transfer Money
+                </h3>
 
-            <h3>
-                Add Money
-            </h3>
+                <p>
+                    Send money to another account.
+                </p>
 
-            <p>
-                Add money to your SMoney account.
-            </p>
-
-        </a>
+            </a>
 
 
-        <a href="#" class="action">
+            <a href="#" class="action" id="beneficiaries">
 
-            <div class="icon">
-                💸
-            </div>
+                <div class="icon">
+                    👤
+                </div>
 
-            <h3>
-                Transfer Money
-            </h3>
+                <h3>
+                    Beneficiaries
+                </h3>
 
-            <p>
-                Send money to another account.
-            </p>
+                <p>
+                    Manage your saved beneficiaries.
+                </p>
 
-        </a>
-
-
-        <a href="#" class="action">
-
-            <div class="icon">
-                👤
-            </div>
-
-            <h3>
-                Beneficiaries
-            </h3>
-
-            <p>
-                Manage your saved beneficiaries.
-            </p>
-
-        </a>
-
-    </div>
-
-
-    <div class="section">
-
-        <div class="section-header">
-
-            <h2>
-                Recent Transactions
-            </h2>
-
-            <a href="#" class="view">
-                View All
             </a>
 
         </div>
 
-        <div class="empty">
 
-            No transactions yet.
+        <div class="section">
+
+            <div class="section-header">
+
+                <h2>
+                    Recent Transactions
+                </h2>
+
+                <a href="#" class="view">
+                    View All
+                </a>
+
+            </div>
+
+            <div class="empty">
+                No transactions yet.
+            </div>
 
         </div>
 
     </div>
 
 </div>
+
+
+<script type="module">
+
+    import { createClient } from
+    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+
+    /*
+     * SMONEY SUPABASE CONFIGURATION
+     */
+
+    const SUPABASE_URL =
+        "https://ljmpfkdursxpoxkhdvel.supabase.co";
+
+
+    const SUPABASE_PUBLISHABLE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqbXBma2R1cnN4cG94a2hkdmVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczMTE0NzMsImV4cCI6MjEwMjg4NzQ3M30.u7aYKII3RPLNrIz5sn9xzxXFuPg79Fabm6filX1vHF8";
+
+
+    const supabase = createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+    /*
+     * PAGE ELEMENTS
+     */
+
+    const loading =
+        document.getElementById("loading");
+
+    const dashboardContent =
+        document.getElementById("dashboardContent");
+
+    const userName =
+        document.getElementById("userName");
+
+    const userEmail =
+        document.getElementById("userEmail");
+
+    const accountNumber =
+        document.getElementById("accountNumber");
+
+    const logoutButton =
+        document.getElementById("logoutButton");
+
+    const errorBox =
+        document.getElementById("errorBox");
+
+
+    /*
+     * SHOW ERROR
+     */
+
+    function showError(message) {
+
+        errorBox.textContent = message;
+
+        errorBox.style.display = "block";
+
+    }
+
+
+    /*
+     * GENERATE A 10-DIGIT SMONEY ACCOUNT NUMBER
+     *
+     * This number is generated from the user's
+     * Supabase user ID and saved in user metadata.
+     */
+
+    function generateAccountNumber(userId) {
+
+        let number = "";
+
+        for (let i = 0; i < userId.length; i++) {
+
+            number += userId.charCodeAt(i);
+
+        }
+
+        let numeric =
+            number.replace(/\D/g, "");
+
+        if (numeric.length < 10) {
+
+            numeric =
+                (numeric + "1234567890");
+
+        }
+
+        return numeric
+            .substring(0, 10);
+
+    }
+
+
+    /*
+     * LOAD USER ACCOUNT
+     */
+
+    async function loadDashboard() {
+
+        try {
+
+            const {
+                data: {
+                    session
+                },
+                error: sessionError
+            } =
+                await supabase.auth.getSession();
+
+
+            if (sessionError) {
+
+                throw sessionError;
+
+            }
+
+
+            /*
+             * USER IS NOT LOGGED IN
+             */
+
+            if (!session) {
+
+                window.location.href =
+                    "login.html";
+
+                return;
+
+            }
+
+
+            const user =
+                session.user;
+
+
+            /*
+             * GET USER NAME
+             *
+             * The signup page saved the name
+             * as full_name in user metadata.
+             */
+
+            let fullName =
+                user.user_metadata?.full_name;
+
+
+            if (!fullName) {
+
+                fullName = "User";
+
+            }
+
+
+            userName.textContent =
+                fullName;
+
+
+            /*
+             * SHOW EMAIL
+             */
+
+            userEmail.textContent =
+                user.email || "";
+
+
+            /*
+             * GET ACCOUNT NUMBER
+             */
+
+            let savedAccountNumber =
+                user.user_metadata?.account_number;
+
+
+            /*
+             * CREATE ONE IF IT DOESN'T EXIST
+             */
+
+            if (!savedAccountNumber) {
+
+                savedAccountNumber =
+                    generateAccountNumber(user.id);
+
+
+                /*
+                 * Save the account number
+                 * to the user's Supabase metadata.
+                 */
+
+                const {
+                    error: updateError
+                } =
+                    await supabase.auth.updateUser({
+
+                        data: {
+                            account_number:
+                                savedAccountNumber
+                        }
+
+                    });
+
+
+                if (updateError) {
+
+                    console.error(
+                        "Account number save error:",
+                        updateError
+                    );
+
+                }
+
+            }
+
+
+            accountNumber.textContent =
+                savedAccountNumber;
+
+
+            /*
+             * SHOW DASHBOARD
+             */
+
+            loading.style.display =
+                "none";
+
+            dashboardContent.style.display =
+                "block";
+
+
+        } catch (error) {
+
+            console.error(
+                "Dashboard error:",
+                error
+            );
+
+
+            loading.style.display =
+                "none";
+
+            dashboardContent.style.display =
+                "block";
+
+            showError(
+                "Unable to load your account. Please refresh the page."
+            );
+
+        }
+
+    }
+
+
+    /*
+     * LOGOUT
+     */
+
+    logoutButton.addEventListener(
+        "click",
+        async function() {
+
+            logoutButton.disabled =
+                true;
+
+            logoutButton.textContent =
+                "Logging out...";
+
+
+            try {
+
+                const {
+                    error
+                } =
+                    await supabase.auth.signOut();
+
+
+                if (error) {
+
+                    throw error;
+
+                }
+
+
+                window.location.href =
+                    "login.html";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
+
+
+                logoutButton.disabled =
+                    false;
+
+                logoutButton.textContent =
+                    "Logout";
+
+                alert(
+                    "Unable to logout. Please try again."
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+     * TEMPORARY ACTION MESSAGES
+     *
+     * We will connect these to the real
+     * transaction system next.
+     */
+
+    document
+        .getElementById("addMoney")
+        .addEventListener("click", function(event) {
+
+            event.preventDefault();
+
+            alert(
+                "Add Money will be connected to your SMoney funding system next."
+            );
+
+        });
+
+
+    document
+        .getElementById("transferMoney")
+        .addEventListener("click", function(event) {
+
+            event.preventDefault();
+
+            alert(
+                "Transfer Money will be connected to your SMoney transfer system next."
+            );
+
+        });
+
+
+    document
+        .getElementById("beneficiaries")
+        .addEventListener("click", function(event) {
+
+            event.preventDefault();
+
+            alert(
+                "Beneficiaries will be connected next."
+            );
+
+        });
+
+
+    /*
+     * START DASHBOARD
+     */
+
+    loadDashboard();
+
+</script>
 
 </body>
 </html>
