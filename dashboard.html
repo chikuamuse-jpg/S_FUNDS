@@ -47,6 +47,11 @@
             font-size: 16px;
         }
 
+        .logout:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .container {
             max-width: 1100px;
             margin: 40px auto;
@@ -170,6 +175,10 @@
             display: none;
         }
 
+        .action.disabled {
+            opacity: 0.65;
+        }
+
         @media (max-width: 700px) {
 
             .actions {
@@ -224,9 +233,7 @@
                 Manage your SMoney account from one place.
             </p>
 
-            <div class="user-email" id="userEmail">
-                Loading email...
-            </div>
+            <div class="user-email" id="userEmail"></div>
 
         </div>
 
@@ -237,14 +244,14 @@
                 Available Balance
             </p>
 
-            <div class="balance">
+            <div class="balance" id="balance">
                 ₦0.00
             </div>
 
             <div class="account-number">
                 Account Number:
                 <span id="accountNumber">
-                    Generating...
+                    Loading...
                 </span>
             </div>
 
@@ -253,7 +260,7 @@
 
         <div class="actions">
 
-            <a href="#" class="action" id="addMoney">
+            <a href="#" class="action disabled" id="addMoney">
 
                 <div class="icon">
                     💰
@@ -270,7 +277,7 @@
             </a>
 
 
-            <a href="#" class="action" id="transferMoney">
+            <a href="#" class="action disabled" id="transferMoney">
 
                 <div class="icon">
                     💸
@@ -287,7 +294,7 @@
             </a>
 
 
-            <a href="#" class="action" id="beneficiaries">
+            <a href="#" class="action disabled" id="beneficiaries">
 
                 <div class="icon">
                     👤
@@ -314,13 +321,13 @@
                     Recent Transactions
                 </h2>
 
-                <a href="#" class="view">
+                <a href="#" class="view" id="viewAll">
                     View All
                 </a>
 
             </div>
 
-            <div class="empty">
+            <div class="empty" id="transactions">
                 No transactions yet.
             </div>
 
@@ -334,11 +341,13 @@
 <script type="module">
 
     import { createClient } from
-    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+        "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 
     /*
-     * SMONEY SUPABASE CONFIGURATION
+     * =========================================
+     * SUPABASE CONFIGURATION
+     * =========================================
      */
 
     const SUPABASE_URL =
@@ -356,7 +365,9 @@
 
 
     /*
+     * =========================================
      * PAGE ELEMENTS
+     * =========================================
      */
 
     const loading =
@@ -364,6 +375,9 @@
 
     const dashboardContent =
         document.getElementById("dashboardContent");
+
+    const errorBox =
+        document.getElementById("errorBox");
 
     const userName =
         document.getElementById("userName");
@@ -374,15 +388,17 @@
     const accountNumber =
         document.getElementById("accountNumber");
 
+    const balance =
+        document.getElementById("balance");
+
     const logoutButton =
         document.getElementById("logoutButton");
 
-    const errorBox =
-        document.getElementById("errorBox");
-
 
     /*
-     * SHOW ERROR
+     * =========================================
+     * ERROR MESSAGE
+     * =========================================
      */
 
     function showError(message) {
@@ -395,53 +411,25 @@
 
 
     /*
-     * GENERATE A 10-DIGIT SMONEY ACCOUNT NUMBER
-     *
-     * This number is generated from the user's
-     * Supabase user ID and saved in user metadata.
-     */
-
-    function generateAccountNumber(userId) {
-
-        let number = "";
-
-        for (let i = 0; i < userId.length; i++) {
-
-            number += userId.charCodeAt(i);
-
-        }
-
-        let numeric =
-            number.replace(/\D/g, "");
-
-        if (numeric.length < 10) {
-
-            numeric =
-                (numeric + "1234567890");
-
-        }
-
-        return numeric
-            .substring(0, 10);
-
-    }
-
-
-    /*
-     * LOAD USER ACCOUNT
+     * =========================================
+     * LOAD DASHBOARD
+     * =========================================
      */
 
     async function loadDashboard() {
 
         try {
 
+            /*
+             * Get current login session
+             */
+
             const {
                 data: {
                     session
                 },
                 error: sessionError
-            } =
-                await supabase.auth.getSession();
+            } = await supabase.auth.getSession();
 
 
             if (sessionError) {
@@ -452,7 +440,7 @@
 
 
             /*
-             * USER IS NOT LOGGED IN
+             * User is not logged in
              */
 
             if (!session) {
@@ -470,89 +458,101 @@
 
 
             /*
-             * GET USER NAME
-             *
-             * The signup page saved the name
-             * as full_name in user metadata.
+             * =================================
+             * USER INFORMATION
+             * =================================
              */
 
-            let fullName =
-                user.user_metadata?.full_name;
-
-
-            if (!fullName) {
-
-                fullName = "User";
-
-            }
+            const fullName =
+                user.user_metadata?.full_name ||
+                "User";
 
 
             userName.textContent =
                 fullName;
 
 
-            /*
-             * SHOW EMAIL
-             */
-
             userEmail.textContent =
                 user.email || "";
 
 
             /*
-             * GET ACCOUNT NUMBER
+             * =================================
+             * GET SMONEY ACCOUNT
+             * =================================
              */
 
-            let savedAccountNumber =
-                user.user_metadata?.account_number;
+            const {
+                data: account,
+                error: accountError
+            } = await supabase
+                .from("accounts")
+                .select(
+                    "account_number, balance"
+                )
+                .eq(
+                    "user_id",
+                    user.id
+                )
+                .maybeSingle();
 
 
-            /*
-             * CREATE ONE IF IT DOESN'T EXIST
-             */
+            if (accountError) {
 
-            if (!savedAccountNumber) {
-
-                savedAccountNumber =
-                    generateAccountNumber(user.id);
-
-
-                /*
-                 * Save the account number
-                 * to the user's Supabase metadata.
-                 */
-
-                const {
-                    error: updateError
-                } =
-                    await supabase.auth.updateUser({
-
-                        data: {
-                            account_number:
-                                savedAccountNumber
-                        }
-
-                    });
-
-
-                if (updateError) {
-
-                    console.error(
-                        "Account number save error:",
-                        updateError
-                    );
-
-                }
+                throw accountError;
 
             }
 
 
-            accountNumber.textContent =
-                savedAccountNumber;
+            /*
+             * Account hasn't been created yet
+             */
+
+            if (!account) {
+
+                accountNumber.textContent =
+                    "Not available";
+
+                balance.textContent =
+                    "₦0.00";
+
+                showError(
+                    "Your SMoney account has not been created yet. Please contact support."
+                );
+
+            } else {
+
+                /*
+                 * Show real account number
+                 */
+
+                accountNumber.textContent =
+                    account.account_number;
+
+
+                /*
+                 * Show real database balance
+                 */
+
+                const amount =
+                    Number(account.balance || 0);
+
+
+                balance.textContent =
+                    "₦" +
+                    amount.toLocaleString(
+                        "en-NG",
+                        {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }
+                    );
+
+            }
 
 
             /*
-             * SHOW DASHBOARD
+             * Show dashboard
              */
 
             loading.style.display =
@@ -576,8 +576,9 @@
             dashboardContent.style.display =
                 "block";
 
+
             showError(
-                "Unable to load your account. Please refresh the page."
+                "Unable to load your SMoney account. Please refresh the page."
             );
 
         }
@@ -586,7 +587,9 @@
 
 
     /*
+     * =========================================
      * LOGOUT
+     * =========================================
      */
 
     logoutButton.addEventListener(
@@ -644,53 +647,67 @@
 
 
     /*
-     * TEMPORARY ACTION MESSAGES
+     * =========================================
+     * ACTIONS
+     * =========================================
      *
-     * We will connect these to the real
-     * transaction system next.
+     * These stay disabled for now.
+     * We will connect them to secure database
+     * operations in the next stage.
      */
 
     document
         .getElementById("addMoney")
-        .addEventListener("click", function(event) {
+        .addEventListener(
+            "click",
+            function(event) {
 
-            event.preventDefault();
+                event.preventDefault();
 
-            alert(
-                "Add Money will be connected to your SMoney funding system next."
-            );
+                alert(
+                    "Add Money is coming next."
+                );
 
-        });
+            }
+        );
 
 
     document
         .getElementById("transferMoney")
-        .addEventListener("click", function(event) {
+        .addEventListener(
+            "click",
+            function(event) {
 
-            event.preventDefault();
+                event.preventDefault();
 
-            alert(
-                "Transfer Money will be connected to your SMoney transfer system next."
-            );
+                alert(
+                    "Transfer Money is coming next."
+                );
 
-        });
+            }
+        );
 
 
     document
         .getElementById("beneficiaries")
-        .addEventListener("click", function(event) {
+        .addEventListener(
+            "click",
+            function(event) {
 
-            event.preventDefault();
+                event.preventDefault();
 
-            alert(
-                "Beneficiaries will be connected next."
-            );
+                alert(
+                    "Beneficiaries are coming next."
+                );
 
-        });
+            }
+        );
 
 
     /*
-     * START DASHBOARD
+     * =========================================
+     * START
+     * =========================================
      */
 
     loadDashboard();
